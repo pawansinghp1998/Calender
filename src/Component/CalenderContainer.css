@@ -1,0 +1,21 @@
+.calender-container {
+  width: 450px;
+  background: #ffffff;
+  border-radius: 0 0 10px 10px;
+}
+
+input {
+  width: 120px;
+}
+.input-box {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+}
+.err-msg {
+  font-weight: 400;
+  font-size: 13px;
+  color: red;
+  padding-left: 10px;
+}

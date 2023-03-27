@@ -1,13 +1,13 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import Calender from "./Component/CalenderScreen";
+import CalenderContainer from "./Component/CalenderContainer";
 
 function App() {
   return (
     <div className="App">
       <body>
-        <Calender />
+        <CalenderContainer />
       </body>
     </div>
   );

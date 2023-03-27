@@ -1,14 +1,17 @@
 import React from "react";
 import "./Calender.css";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { ICalenderScreen } from "./types";
 import { month } from "./constants";
-let moment = require("moment");
-const Calender = () => {
+const Calender = (props: ICalenderScreen) => {
+  const {
+    currentYear,
+    setCurrentYear,
+    currentMonth,
+    setCurrentMonth,
+    currentDate,
+  } = props;
   let date = new Date();
-  const [currentMonth, setCurrentMonth] = useState(date.getMonth());
-  const [currentYear, setCurrentYear] = useState(date.getFullYear());
-  const [errorMessage, setErrorMessage] = useState("");
-
   let firstDayMonth = new Date(currentYear, currentMonth, 1).getDay();
   let lastDateOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   let lastDayOfMonth = new Date(
@@ -22,12 +25,13 @@ const Calender = () => {
     let listTag = [];
     for (let i = 1; i <= lastDateOfMonth; i++) {
       let isToday =
-        i === date.getDate() &&
-        currentMonth === new Date().getMonth() &&
-        currentYear === new Date().getFullYear()
+        (i === date.getDate() &&
+          currentMonth === new Date().getMonth() &&
+          currentYear === new Date().getFullYear()) ||
+        currentDate === i
           ? "active"
           : "";
-      listTag.push(<li className={isToday}>{`${i}`}</li>);
+      listTag.push(<li className={isToday} key={i}>{`${i}`}</li>);
     }
     return listTag;
   };
@@ -36,7 +40,7 @@ const Calender = () => {
     let listTag = [];
     for (let i = firstDayMonth; i > 0; i--) {
       listTag.push(
-        <li className="inactive">{`${lastDateOfLastMonth - i + 1}`}</li>
+        <li className="inactive" key={i}>{`${lastDateOfLastMonth - i + 1}`}</li>
       );
     }
     return listTag;
@@ -45,7 +49,9 @@ const Calender = () => {
   const renderNextMonthDays = () => {
     let listTag = [];
     for (let i = lastDayOfMonth; i < 6; i++) {
-      listTag.push(<li className="inactive">{`${i - lastDayOfMonth + 1}`}</li>);
+      listTag.push(
+        <li className="inactive" key={i}>{`${i - lastDayOfMonth + 1}`}</li>
+      );
     }
     return listTag;
   };
@@ -66,18 +72,6 @@ const Calender = () => {
     setCurrentMonth(currentMonth + 1);
   };
 
-  const handleDateInput = (value: string) => {
-    if (moment(value, "YYYY/MM/DD", true).isValid()) {
-      setCurrentMonth(+value.substring(5, 7) - 1);
-      setCurrentYear(+value.substring(0, 4));
-    } else {
-      if (value.length > 0) setErrorMessage("Invalid");
-      else {
-        setErrorMessage("");
-      }
-    }
-  };
-
   return (
     <div className="wrapper">
       <header>
@@ -85,15 +79,6 @@ const Calender = () => {
           <span onClick={() => handleBackward()}>{`<`}</span>
         </div>
         <p className="current-date">{`${month[currentMonth]}  ${currentYear}`}</p>
-        <div className="input-box">
-          <input
-            placeholder="YYYY/MM/DD"
-            onChange={(e) => handleDateInput(e.target.value)}
-          />
-          {errorMessage.length > 0 && (
-            <div className="err-msg">{errorMessage}</div>
-          )}
-        </div>
         <div className="icons">
           <span onClick={() => handleForward()}>{`>`}</span>
         </div>
